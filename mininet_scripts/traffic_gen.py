@@ -10,9 +10,9 @@ def start_iperf(net):
     h3 = net.get('h3')
     h3.cmd('iperf -s > /tmp/h3-iperf.log &')
 
-    # Avvia iperf client UDP su h1
+    # Avvia iperf client UDP su h1 (attacker)
     h1 = net.get('h1')
-    h1.cmd('iperf -u -c 10.0.0.3 -b 10M > /tmp/h1-iperf.log &')
+    h1.cmd('iperf -u -c 10.0.0.3 -b 100M > /tmp/h1-iperf.log &')
 
     # Avvia iperf client TCP su h2
     h2 = net.get('h2')
@@ -38,7 +38,16 @@ def main():
     info('Starting iperf tests...\n')
     start_iperf(net)
     
+    # Avvia lo script di monitoraggio come processo separato
+    info('Starting monitoring script...\n')
+    monitor_process = subprocess.Popen(['python3', 'monitor.py'])
+    
+    # Attendi che l'utente termini la sessione CLI
     CLI(net)
+    
+    # Termina il processo di monitoraggio quando la CLI viene chiusa
+    monitor_process.terminate()
+    monitor_process.wait()
 
     info('Stopping iperf tests...\n')
     stop_iperf(net)
