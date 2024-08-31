@@ -39,15 +39,15 @@ def main():
     start_iperf(net)
     
     # Avvia lo script di monitoraggio come processo separato
-    info('Starting monitoring script...\n')
-    monitor_process = subprocess.Popen(['python3', 'monitor.py'])
+    info('Starting report script...\n')
+    report_process = subprocess.Popen(['python3', 'report.py'])
     
     # Attendi che l'utente termini la sessione CLI
     CLI(net)
     
     # Termina il processo di monitoraggio quando la CLI viene chiusa
-    monitor_process.terminate()
-    monitor_process.wait()
+    report_process.terminate()
+    report_process.wait()
 
     info('Stopping iperf tests...\n')
     stop_iperf(net)

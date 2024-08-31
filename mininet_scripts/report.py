@@ -6,7 +6,7 @@ from mininet.log import setLogLevel, info
 from topology import Environment  # Assicurati che questo sia il nome del tuo file di topologia
 import time
 
-def start_monitoring(net):
+def report(net):
     h2 = net.get('h2')
     core_switch = net.get('s3')  # Switch core
 
@@ -115,7 +115,7 @@ def main():
     net.addController('c0')
     net.start()
 
-    start_monitoring(net)
+    report(net)
     
     # Attendi per la durata del monitoraggio
     time.sleep(60)
